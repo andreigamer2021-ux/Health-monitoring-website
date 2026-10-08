@@ -1,0 +1,269 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    margin: 20px;
+    color: #2c3e50;
+}
+
+body[hidden] {
+    display: none;
+}
+
+.account-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.auth-card {
+    max-width: 420px;
+    margin: 8vh auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h1 {
+    margin-top: 0;
+}
+
+.auth-card label {
+    display: block;
+    margin: 16px 0 6px;
+    font-weight: 600;
+}
+
+.auth-card input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font: inherit;
+}
+
+.auth-card button,
+.account-bar button {
+    margin-top: 16px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #3b6e11;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.auth-card .auth-secondary {
+    background: transparent;
+    color: #224605;
+    padding-left: 0;
+}
+
+#auth-status[data-error="true"],
+#account-status {
+    color: #8c2525;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+h2 {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+.summary-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 220px;
+    text-align: center;
+    border-top: 4px solid #224605;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card.calories {
+    border-top-color: #e67e22;
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+}
+
+.card .value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.card .unit {
+    font-size: 14px;
+    color: #459ba1;
+}
+
+.card button {
+    margin-top: 12px;
+}
+
+.table-container td button {
+    margin-left: 8px;
+}
+
+.table-container {
+    width: 80%;
+    margin: 0 auto 30px auto;
+    overflow-x: auto;
+    max-width: 600px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: #3b6e11;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ecf0f1;
+    color: #2c3e50;
+}
+
+tr:hover td {
+    background-color: #f1f8f9;
+}
+
+/* Centrare container buton */
+.button-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Stil buton apă */
+#calories-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#calories-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#calories-intake:active {
+    transform: scale(0.98);
+}
+#calories-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#water-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#water-intake:active {
+    transform: scale(0.98);
+}
+#water-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#water-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#water-intake:active {
+    transform: scale(0.98);
+}
+#water-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#water-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#water-intake:active {
+    transform: scale(0.98);
+}
+
+#continue-to-dashboard {
+    padding: 10px 20px;
+    background-color: #b64141;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+#steps {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
