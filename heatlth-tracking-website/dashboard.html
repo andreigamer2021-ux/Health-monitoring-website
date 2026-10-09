@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#1565c0">
+    <title>Track your health here!!</title>
+    <!-- Conectare la fișierul CSS extern -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body hidden>
+    <div class="account-bar">
+        <nav class="dashboard-nav" aria-label="Dashboard sections">
+            <a href="#dashboard-home">Dashboard</a>
+            <a href="#activities-section">Activities</a>
+            <a href="#daily-overview">Daily Overview</a>
+            <a href="daily-meal.html">Meals</a>
+            <a href="#recipe-ideas">Recipes</a>
+            <a href="test.html">Take Test</a>
+        </nav>
+        <div class="account-menu-container">
+            <button id="profile-menu-toggle" class="photo-button" type="button"
+                aria-label="Open account options" aria-controls="account-menu" aria-expanded="false">
+                <img src="profile-placeholder.svg" alt="">
+            </button>
+            <div id="account-menu" class="account-menu" hidden>
+                <span id="user-email"></span>
+                <span id="account-status" role="status" aria-live="polite"></span>
+                <button id="open-stats" type="button">Stats</button>
+                <button id="open-favorites" type="button">Favorite recipes</button>
+                <button id="open-settings" type="button">
+                    Settings <span class="settings-gear" aria-hidden="true">&#9881;</span>
+                </button>
+                <button id="open-profile-pictures" type="button">Profile pictures</button>
+                <button id="sign-out" type="button">Sign out</button>
+            </div>
+        </div>
+    </div>
+    <dialog id="profile-pictures-dialog" class="profile-dialog" aria-labelledby="profile-dialog-title">
+        <div class="profile-dialog-header">
+            <h2 id="profile-dialog-title">Profile pictures</h2>
+            <button id="close-profile-dialog" class="profile-dialog-close" type="button"
+                aria-label="Close profile pictures">&times;</button>
+        </div>
+        <div id="profile-picture-options" class="profile-picture-grid"
+            role="group" aria-label="Choose a profile picture"></div>
+    </dialog>
+
+    <h1 id="dashboard-home">Health Dashboard</h1>
+
+    <div class="summary-container">
+        <div class="card">
+            <h3>Steps</h3>
+            <div class="value" id="steps-value"></div>
+            <div class="unit">Steps per day</div>
+            <div class="steps-done" id="steps-done">Steps Done: 0</div>
+            <button id="steps" type="button">+1000 steps</button>
+        </div>
+        <div class="card calories">
+            <h3>Calories</h3>
+            <div class="value" id="calories-value"></div>
+            <div class="unit">Calories</div>
+            <button id="calories-intake" type="button">+100 calories</button>
+            <button id="calories-burned" type="button">Log +100 calories burned</button>
+        </div>
+    </div>
+
+    <!-- Tabelul 1: Activități -->
+    <div class="table-container">
+        <h2 id="activities-section">Activities Log</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Activity Name</th>
+                    <th>Duration</th>
+                    <th>Calories</th>
+                </tr>
+            </thead>
+            <tbody id="activities-table"></tbody>
+        </table>
+    </div>
+
+    <!-- Tabelul 2: Apă și Calorii ale zilei -->
+    <div class="table-container">
+        <h2 id="daily-overview">Daily Overview (Water & Intake)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Recorded</th>
+                    <th>Daily Goal</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody id="daily-stats-table"></tbody>
+        </table>
+    </div>
+    <section class="recipes" id="recipe-ideas">
+        <h2>Recipe Ideas</h2>
+        <button id="random-recipe-button" type="button">Surprise me with a recipe</button>
+        <p id="recipe-favorite-status" class="recipe-favorite-status"
+            role="status" aria-live="polite"></p>
+        <div class="recipe-grid">
+            <article class="recipe-card-container" data-recipe-id="chicken-salad">
+                <a class="recipe-card"
+                    href="https://www.allrecipes.com/recipe/8499/basic-chicken-salad/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Chicken Salad</h3>
+                    <p>Grilled chicken, lettuce, tomato, and cucumber.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Chicken Salad to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="overnight-oats">
+                <a class="recipe-card"
+                    href="https://www.eatingwell.com/recipe/262655/overnight-oats/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Overnight Oats</h3>
+                    <p>Oats, milk, berries, and a little honey.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Overnight Oats to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="veggie-wrap">
+                <a class="recipe-card"
+                    href="https://www.loveandlemons.com/veggie-wrap/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Veggie Wrap</h3>
+                    <p>Hummus, spinach, peppers, and grated carrot.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Veggie Wrap to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="avocado-toast">
+                <a class="recipe-card"
+                    href="https://www.loveandlemons.com/avocado-toast/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Avocado Toast</h3>
+                    <p>Toasted bread topped with avocado and fresh seasoning.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Avocado Toast to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="vegetable-fried-rice">
+                <a class="recipe-card"
+                    href="https://www.budgetbytes.com/easy-vegetable-fried-rice/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Vegetable Fried Rice</h3>
+                    <p>A quick bowl of rice with colorful vegetables.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Vegetable Fried Rice to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="salmon-rice-bowl">
+                <a class="recipe-card"
+                    href="https://www.eatingwell.com/recipe/276510/salmon-rice-bowl/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Salmon Rice Bowl</h3>
+                    <p>Salmon served with rice and fresh vegetables.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Salmon Rice Bowl to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="greek-salad">
+                <a class="recipe-card"
+                    href="https://www.loveandlemons.com/greek-salad/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Greek Salad</h3>
+                    <p>Cucumber, tomatoes, olives, feta, and a simple dressing.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Greek Salad to favorites">&#9825;</button>
+            </article>
+            <article class="recipe-card-container" data-recipe-id="black-bean-tacos">
+                <a class="recipe-card"
+                    href="https://www.loveandlemons.com/black-bean-tacos/"
+                    target="_blank" rel="noopener noreferrer">
+                    <img src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&amp;fit=crop&amp;w=900&amp;q=85"
+                        alt="">
+                    <h3>Black Bean Tacos</h3>
+                    <p>Seasoned black beans with fresh toppings in warm tortillas.</p>
+                </a>
+                <button class="recipe-favorite" type="button" aria-pressed="false"
+                    aria-label="Save Black Bean Tacos to favorites">&#9825;</button>
+            </article>
+        </div>
+    </section>
+
+    <button id="take-test" type="button">Take a test to see what recipe fits you</button>
+
+    <dialog id="favorite-recipes-dialog" class="profile-dialog favorite-recipes-dialog"
+        aria-labelledby="favorite-recipes-title">
+        <div class="profile-dialog-header">
+            <h2 id="favorite-recipes-title">Favorite Recipes</h2>
+            <button id="close-favorite-recipes" class="profile-dialog-close" type="button"
+                aria-label="Close favorite recipes">&times;</button>
+        </div>
+        <p id="favorite-recipes-empty" class="recipe-favorite-status" hidden>
+            No favorite recipes yet. Use a heart to save a recipe.
+        </p>
+        <div id="favorite-recipes-grid" class="recipe-grid"></div>
+    </dialog>
+
+    <dialog id="random-recipe-dialog" class="profile-dialog favorite-recipes-dialog"
+        aria-labelledby="random-recipe-title">
+        <div class="profile-dialog-header">
+            <h2 id="random-recipe-title">Try something new</h2>
+            <button id="close-random-recipe" class="profile-dialog-close" type="button"
+                aria-label="Close random recipe">&times;</button>
+        </div>
+        <div id="random-recipe-card" class="recipe-grid"></div>
+        <button id="another-random-recipe" type="button">Pick another recipe</button>
+    </dialog>
+
+    <script>
+        const favoritesStorageKey = 'health-tracker-favorite-recipes';
+        const favoriteStatus = document.getElementById('recipe-favorite-status');
+        const favoriteButtons = document.querySelectorAll('.recipe-favorite');
+        const recipeCards = document.querySelectorAll('.recipe-card-container');
+        const favoriteRecipesDialog = document.getElementById('favorite-recipes-dialog');
+        const favoriteRecipesGrid = document.getElementById('favorite-recipes-grid');
+        const favoriteRecipesEmpty = document.getElementById('favorite-recipes-empty');
+        const randomRecipeDialog = document.getElementById('random-recipe-dialog');
+        const randomRecipeCard = document.getElementById('random-recipe-card');
+        let randomRecipePool = [];
+        let favoriteRecipeIds = [];
+        let favoritesLoaded = false;
+
+        function renderFavoriteRecipes() {
+            if (!favoritesLoaded) {
+                return;
+            }
+
+            favoriteRecipesGrid.replaceChildren();
+            const favoriteCards = Array.from(recipeCards)
+                .filter(card => favoriteRecipeIds.includes(card.dataset.recipeId));
+            favoriteCards.forEach(card => {
+                const copy = card.cloneNode(true);
+                const button = copy.querySelector('.recipe-favorite');
+                updateFavoriteButton(button, true);
+                favoriteRecipesGrid.append(copy);
+            });
+            favoriteRecipesEmpty.hidden = favoriteCards.length > 0;
+        }
+
+        function updateFavoriteButton(button, isFavorite) {
+            const recipeName = button.closest('.recipe-card-container')
+                .querySelector('h3').textContent;
+            button.textContent = isFavorite ? '\u2665' : '\u2661';
+            button.setAttribute('aria-pressed', String(isFavorite));
+            button.setAttribute(
+                'aria-label',
+                `${isFavorite ? 'Remove' : 'Save'} ${recipeName} ${isFavorite ? 'from' : 'to'} favorites`
+            );
+        }
+
+        function showRandomRecipe() {
+            if (randomRecipePool.length === 0) {
+                randomRecipePool = Array.from(recipeCards);
+                for (let index = randomRecipePool.length - 1; index > 0; index -= 1) {
+                    const randomIndex = Math.floor(Math.random() * (index + 1));
+                    [randomRecipePool[index], randomRecipePool[randomIndex]] =
+                        [randomRecipePool[randomIndex], randomRecipePool[index]];
+                }
+            }
+
+            const recipeCard = randomRecipePool.pop();
+            const copy = recipeCard.cloneNode(true);
+            updateFavoriteButton(
+                copy.querySelector('.recipe-favorite'),
+                favoriteRecipeIds.includes(recipeCard.dataset.recipeId)
+            );
+            randomRecipeCard.replaceChildren(copy);
+            if (!randomRecipeDialog.open) {
+                randomRecipeDialog.showModal();
+            }
+        }
+
+        try {
+            const savedFavorites = JSON.parse(
+                localStorage.getItem(favoritesStorageKey) || '[]'
+            );
+            if (!Array.isArray(savedFavorites) ||
+                savedFavorites.some(recipeId => typeof recipeId !== 'string')) {
+                throw new Error('Saved recipe favorites have an invalid format.');
+            }
+            favoriteRecipeIds = savedFavorites;
+            favoritesLoaded = true;
+            favoriteButtons.forEach(button => {
+                const recipeId = button.closest('.recipe-card-container')
+                    .dataset.recipeId;
+                updateFavoriteButton(button, favoriteRecipeIds.includes(recipeId));
+            });
+        } catch (error) {
+            favoriteStatus.textContent =
+                `Could not load saved recipe favorites: ${error.message}`;
+            favoriteButtons.forEach(button => {
+                button.disabled = true;
+            });
+        }
+
+        document.addEventListener('click', event => {
+            const button = event.target.closest('.recipe-favorite');
+            if (!button || !favoritesLoaded) {
+                return;
+            }
+
+            const recipeId = button.closest('.recipe-card-container').dataset.recipeId;
+            const wasFavorite = favoriteRecipeIds.includes(recipeId);
+            const nextFavorites = wasFavorite
+                ? favoriteRecipeIds.filter(savedId => savedId !== recipeId)
+                : [...favoriteRecipeIds, recipeId];
+
+            try {
+                localStorage.setItem(
+                    favoritesStorageKey,
+                    JSON.stringify(nextFavorites)
+                );
+                favoriteRecipeIds = nextFavorites;
+                document.querySelectorAll(
+                    `.recipe-card-container[data-recipe-id="${recipeId}"] .recipe-favorite`
+                ).forEach(favoriteButton => {
+                    updateFavoriteButton(favoriteButton, !wasFavorite);
+                });
+                favoriteStatus.textContent = wasFavorite
+                    ? 'Recipe removed from favorites.'
+                    : 'Recipe saved to favorites.';
+                renderFavoriteRecipes();
+            } catch (error) {
+                favoriteStatus.textContent =
+                    `Could not save recipe favorite: ${error.message}`;
+            }
+        });
+
+        function openFavoriteRecipes() {
+            renderFavoriteRecipes();
+            if (!favoriteRecipesDialog.open) {
+                favoriteRecipesDialog.showModal();
+            }
+            if (window.location.hash === '#favorite-recipes') {
+                window.history.replaceState(
+                    null,
+                    '',
+                    `${window.location.pathname}${window.location.search}`
+                );
+            }
+        }
+
+        document.getElementById('close-favorite-recipes')
+            .addEventListener('click', () => favoriteRecipesDialog.close());
+        document.getElementById('random-recipe-button')
+            .addEventListener('click', showRandomRecipe);
+        document.getElementById('another-random-recipe')
+            .addEventListener('click', showRandomRecipe);
+        document.getElementById('close-random-recipe')
+            .addEventListener('click', () => randomRecipeDialog.close());
+        document.addEventListener('open-favorite-recipes', openFavoriteRecipes);
+        if (window.location.hash === '#favorite-recipes') {
+            openFavoriteRecipes();
+        }
+    </script>
+
+    <script type="module">
+        import { addToAllTimeStats, loadDailyGoals } from './account-goals.js';
+
+        let savedGoalDetails = null;
+        try {
+            savedGoalDetails = await loadDailyGoals();
+        } catch (error) {
+            document.getElementById('account-status').textContent =
+                `Could not load your saved goals: ${error.message}`;
+        }
+
+        const savedGoals = savedGoalDetails?.goals ?? {};
+        const savedGoalNumber = name => {
+            const value = Number(savedGoals[name]);
+            return Number.isFinite(value) && value >= 0 ? value : 0;
+        };
+        const formValues = new URLSearchParams(window.location.search);
+        const formNumber = (name, fallback) => {
+            const value = formValues.get(name);
+            if (value === null || value.trim() === '') {
+                return fallback;
+            }
+
+            const number = Number(value);
+            return Number.isFinite(number) && number >= 0 ? number : fallback;
+        };
+
+        const healthData = {
+            steps: formNumber('steps', savedGoalNumber('steps')),
+            stepsDone: 0,
+            waterIntakeLiters: formNumber('waterIntakeLiters', 0),
+            waterGoalLiters: formNumber(
+                'waterGoalLiters',
+                savedGoalNumber('waterGoalLiters')
+            ),
+            caloriesConsumed: formNumber('caloriesConsumed', 0),
+            caloriesBurned: 0,
+            caloriesGoal: formNumber(
+                'caloriesGoal',
+                savedGoalNumber('caloriesGoal')
+            ),
+            caloriesBurnedGoal: formNumber(
+                'caloriesBurnedGoal',
+                savedGoalNumber('caloriesBurnedGoal')
+            ),
+            activities: [
+                { name: 'running', durationMinutes: 0, calories: 0 },
+                { name: 'walking', durationMinutes: 0, calories: 0 }
+            ]
+        };
+
+        const mealTrackerDate = new Date();
+        const dateParts = [
+            mealTrackerDate.getFullYear(),
+            String(mealTrackerDate.getMonth() + 1).padStart(2, '0'),
+            String(mealTrackerDate.getDate()).padStart(2, '0')
+        ];
+        const mealStorageKey = `health-tracker-meals-${dateParts.join('-')}`;
+        let mealCalories = 0;
+        try {
+            const savedMeals = JSON.parse(localStorage.getItem(mealStorageKey) || '[]');
+            const validMealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+            if (!Array.isArray(savedMeals) || savedMeals.some(meal =>
+                !meal ||
+                typeof meal.id !== 'string' ||
+                typeof meal.name !== 'string' ||
+                !meal.name.trim() ||
+                !validMealTypes.includes(meal.type) ||
+                !Number.isInteger(meal.calories) ||
+                meal.calories < 1
+            )) {
+                throw new Error('Saved meals have an invalid format.');
+            }
+            mealCalories = savedMeals.reduce(
+                (total, meal) => total + meal.calories,
+                0
+            );
+        } catch (error) {
+            document.getElementById('account-status').textContent =
+                `Could not load today's meal calories: ${error.message}`;
+        }
+
+        healthData.caloriesConsumed += mealCalories;
+
+        // Populare carduri
+        document.getElementById('steps-value').textContent = healthData.steps.toLocaleString();
+        document.getElementById('calories-value').textContent = healthData.caloriesConsumed.toLocaleString();
+
+        // Populare Tabel 1 (Activități)
+        document.getElementById('activities-table').innerHTML = healthData.activities
+            .map(activity => `
+                <tr>
+                    <td>${activity.name}</td>
+                    <td>${activity.durationMinutes} min</td>
+                    <td>${activity.calories} kcal</td>
+                </tr>
+            `)
+            .join('');
+
+        // Populare Tabel 2 (Apa băut și Calorii zi)
+        function renderDailyStats() {
+            const dailyOverview = [
+                {
+                    metric: 'Steps',
+                    current: healthData.stepsDone,
+                    goalValue: healthData.steps,
+                    unit: 'steps'
+                },
+                {
+                    metric: 'Water Intake',
+                    current: healthData.waterIntakeLiters,
+                    goalValue: healthData.waterGoalLiters,
+                    unit: 'L'
+                },
+                {
+                    metric: 'Calories Consumed',
+                    current: healthData.caloriesConsumed,
+                    goalValue: healthData.caloriesGoal,
+                    unit: 'kcal'
+                },
+                {
+                    metric: 'Calories Burned',
+                    current: healthData.caloriesBurned,
+                    goalValue: healthData.caloriesBurnedGoal,
+                    unit: 'kcal'
+                }
+            ];
+
+            document.getElementById('daily-stats-table').innerHTML = dailyOverview
+                .map(item => {
+                    const hasGoal = item.goalValue > 0;
+                    const progressPercent = hasGoal
+                        ? Math.round(item.current / item.goalValue * 100)
+                        : 0;
+                    const progressValue = Math.min(progressPercent, 100);
+                    const formatValue = value => item.unit === 'L'
+                        ? value.toFixed(2)
+                        : value.toLocaleString();
+                    const goalText = hasGoal
+                        ? `${formatValue(item.goalValue)} ${item.unit}`
+                        : 'No goal set';
+                    const progressText = hasGoal
+                        ? `${progressPercent}%`
+                        : 'Set a goal to track progress';
+                    const intakeButton = item.metric === 'Water Intake'
+                        ? '<button id="water-intake" type="button">+250ml water</button>'
+                        : '';
+
+                    return `
+                        <tr>
+                            <td>${item.metric}</td>
+                            <td>${formatValue(item.current)} ${item.unit} ${intakeButton}</td>
+                            <td>${goalText}</td>
+                            <td>
+                                ${hasGoal
+                                    ? `<progress max="100" value="${progressValue}"
+                                        aria-label="${item.metric}: ${progressPercent}% of goal"></progress>`
+                                    : ''}
+                                <span>${progressText}</span>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join('');
+        }
+
+        renderDailyStats();
+
+        function recordAllTimeStats(increments) {
+            addToAllTimeStats(increments).catch(error => {
+                document.getElementById('account-status').textContent =
+                    `Could not save all-time stats: ${error.message}`;
+            });
+        }
+
+        // Event Listener pentru butonul de apă
+        document.getElementById('daily-stats-table').addEventListener('click', event => {
+            if (event.target.id === 'water-intake') {
+                healthData.waterIntakeLiters += 0.25;
+                renderDailyStats();
+                recordAllTimeStats({ waterIntakeLiters: 0.25 });
+            }
+        });
+        document.getElementById('calories-intake').addEventListener('click', () => {
+            healthData.caloriesConsumed += 100;
+            document.getElementById('calories-value').textContent =
+                healthData.caloriesConsumed.toLocaleString();
+            renderDailyStats();
+            recordAllTimeStats({ caloriesConsumed: 100 });
+        });
+        document.getElementById('calories-burned').addEventListener('click', () => {
+            healthData.caloriesBurned += 100;
+            renderDailyStats();
+            recordAllTimeStats({ caloriesBurned: 100 });
+        });
+        document.getElementById('steps').addEventListener('click', () => {
+            healthData.stepsDone += 1000;
+            document.getElementById('steps-done').textContent =
+                `Steps Done: ${healthData.stepsDone.toLocaleString()}`;
+            renderDailyStats();
+            recordAllTimeStats({ steps: 1000 });
+        });
+        document.getElementById('take-test').addEventListener('click', () => {
+            window.location.href = 'test.html';
+        });
+    </script>
+    <script type="module" src="auth-guard.js"></script>
+    <script type="module" src="water-reminder.js"></script>
+    <script type="module" src="settings.js"></script>
+    <script type="module" src="plant-pet.js"></script>
+</body>
+</html>

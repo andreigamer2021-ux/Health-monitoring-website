@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#1565c0">
+    <title>Daily Meal Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="meal-page">
+    <header class="account-bar">
+        <nav class="dashboard-nav" aria-label="Main navigation">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="daily-meal.html" aria-current="page">Meals</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Daily Meal Tracker</h1>
+        <p class="meal-page-intro">A simple place to keep track of what you eat today.</p>
+        <section class="meal-tracker" id="meal-tracker"
+            aria-labelledby="meal-tracker-title">
+            <h2 id="meal-tracker-title">Today's Meals</h2>
+            <p class="meal-tracker-date" id="meal-tracker-date"></p>
+            <div class="meal-calorie-card">
+                <h3>Calories logged</h3>
+                <div id="meal-calorie-chart" class="meal-calorie-chart" role="img"
+                    aria-label="No calories logged today">
+                    <div class="meal-calorie-chart-center">
+                        <strong id="meal-calorie-total">0</strong>
+                        <span>kcal</span>
+                    </div>
+                </div>
+                <p id="meal-calorie-goal" class="meal-calorie-goal"></p>
+                <progress id="meal-calorie-progress" class="meal-calorie-progress"
+                    max="100" value="0" aria-label="Daily calorie goal progress" hidden></progress>
+                <a id="set-calorie-goal" class="set-calorie-goal" href="forms.html" hidden>
+                    Set a daily calorie goal
+                </a>
+                <ul id="meal-calorie-legend" class="meal-calorie-legend"
+                    aria-label="Calories by meal type"></ul>
+            </div>
+            <form id="meal-form" class="meal-form">
+                <label>
+                    Meal
+                    <select name="type" required>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                        <option value="Snack">Snack</option>
+                    </select>
+                </label>
+                <label>
+                    Food or meal
+                    <input name="name" type="text" maxlength="100" required>
+                </label>
+                <label>
+                    Calories
+                    <input name="calories" type="number" min="1" step="1" required>
+                </label>
+                <button type="submit">Add meal</button>
+            </form>
+            <p id="meal-tracker-status" class="meal-tracker-status"
+                role="status" aria-live="polite"></p>
+            <p id="meal-goal-status" class="meal-tracker-status"
+                role="status" aria-live="polite"></p>
+            <ul id="meal-list" class="meal-list" aria-label="Meals logged today"></ul>
+        </section>
+        <section class="meal-history" aria-labelledby="meal-history-title">
+            <div class="meal-history-heading">
+                <h2 id="meal-history-title">Daily calorie log</h2>
+                <span>Last 7 days</span>
+            </div>
+            <div id="meal-history-chart" class="meal-history-chart" role="img"
+                aria-label="Daily calorie totals for the last seven days"></div>
+            <p id="meal-history-status" class="meal-history-status"
+                role="status" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <script type="module">
+        import { addToAllTimeStats, loadDailyGoals } from './account-goals.js';
+
+        const mealForm = document.getElementById('meal-form');
+        const mealList = document.getElementById('meal-list');
+        const mealStatus = document.getElementById('meal-tracker-status');
+        const mealCalorieChart = document.getElementById('meal-calorie-chart');
+        const mealCalorieLegend = document.getElementById('meal-calorie-legend');
+        const mealCalorieGoal = document.getElementById('meal-calorie-goal');
+        const mealCalorieProgress = document.getElementById('meal-calorie-progress');
+        const setCalorieGoalLink = document.getElementById('set-calorie-goal');
+        const mealGoalStatus = document.getElementById('meal-goal-status');
+        const mealHistoryChart = document.getElementById('meal-history-chart');
+        const mealHistoryStatus = document.getElementById('meal-history-status');
+        const mealTrackerDate = new Date();
+        const dateParts = [
+            mealTrackerDate.getFullYear(),
+            String(mealTrackerDate.getMonth() + 1).padStart(2, '0'),
+            String(mealTrackerDate.getDate()).padStart(2, '0')
+        ];
+        const mealStorageKey = `health-tracker-meals-${dateParts.join('-')}`;
+        const validMealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+        let meals = [];
+        let mealStorageAvailable = true;
+        let dailyCalorieGoal = 0;
+
+        try {
+            const goalDetails = await loadDailyGoals();
+            const savedGoal = Number(goalDetails?.goals?.caloriesGoal);
+            if (Number.isFinite(savedGoal) && savedGoal > 0) {
+                dailyCalorieGoal = savedGoal;
+            }
+        } catch (error) {
+            mealGoalStatus.textContent =
+                `Could not load your saved calorie goal: ${error.message}`;
+        }
+
+        document.getElementById('meal-tracker-date').textContent =
+            mealTrackerDate.toLocaleDateString(undefined, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+        try {
+            const savedMeals = JSON.parse(localStorage.getItem(mealStorageKey) || '[]');
+            if (!Array.isArray(savedMeals) || savedMeals.some(meal =>
+                !meal ||
+                typeof meal.id !== 'string' ||
+                typeof meal.name !== 'string' ||
+                !meal.name.trim() ||
+                !validMealTypes.includes(meal.type) ||
+                !Number.isInteger(meal.calories) ||
+                meal.calories < 1
+            )) {
+                throw new Error('Saved meals have an invalid format.');
+            }
+            meals = savedMeals;
+        } catch (error) {
+            mealStorageAvailable = false;
+            mealStatus.textContent = `Could not load today's meals: ${error.message}`;
+            mealForm.querySelectorAll('input, select, button').forEach(control => {
+                control.disabled = true;
+            });
+        }
+
+        function renderMeals() {
+            mealList.replaceChildren();
+            const caloriesByType = Object.fromEntries(
+                validMealTypes.map(type => [type, 0])
+            );
+            meals.forEach(meal => {
+                caloriesByType[meal.type] += meal.calories;
+            });
+            const totalCalories = Object.values(caloriesByType)
+                .reduce((total, calories) => total + calories, 0);
+            document.getElementById('meal-calorie-total').textContent =
+                totalCalories.toLocaleString();
+            if (dailyCalorieGoal > 0) {
+                const progressPercent = Math.round(
+                    totalCalories / dailyCalorieGoal * 100
+                );
+                mealCalorieGoal.textContent =
+                    `Daily goal: ${dailyCalorieGoal.toLocaleString()} kcal · ${progressPercent}%`;
+                mealCalorieProgress.value = Math.min(progressPercent, 100);
+                mealCalorieProgress.setAttribute(
+                    'aria-label',
+                    `${progressPercent}% of daily calorie goal`
+                );
+                mealCalorieProgress.hidden = false;
+            } else {
+                mealCalorieGoal.textContent = 'No daily calorie goal set';
+                mealCalorieProgress.hidden = true;
+                setCalorieGoalLink.hidden = false;
+            }
+
+            const chartColors = ['#e99354', '#6c9b72', '#6686bd', '#c17b9b'];
+            let currentPercent = 0;
+            const chartSegments = validMealTypes.map((type, index) => {
+                const percent = totalCalories > 0
+                    ? caloriesByType[type] / totalCalories * 100
+                    : 0;
+                const segment = `${chartColors[index]} ${currentPercent}% ${currentPercent + percent}%`;
+                currentPercent += percent;
+                return segment;
+            });
+            mealCalorieChart.style.setProperty(
+                '--meal-chart-gradient',
+                totalCalories > 0
+                    ? `conic-gradient(${chartSegments.join(', ')})`
+                    : '#e8eae4'
+            );
+            mealCalorieChart.setAttribute(
+                'aria-label',
+                totalCalories > 0
+                    ? `Calories by meal type: ${validMealTypes
+                        .map(type => `${type} ${caloriesByType[type]}`)
+                        .join(', ')}; total ${totalCalories} kilocalories${
+                        dailyCalorieGoal > 0
+                            ? `; ${Math.round(totalCalories / dailyCalorieGoal * 100)}% of daily goal`
+                            : ''
+                    }`
+                    : 'No calories logged today'
+            );
+            mealCalorieLegend.replaceChildren();
+            validMealTypes.forEach((type, index) => {
+                const item = document.createElement('li');
+                const swatch = document.createElement('span');
+                const label = document.createElement('span');
+                swatch.className = 'meal-calorie-swatch';
+                swatch.style.setProperty('--meal-type-color', chartColors[index]);
+                swatch.setAttribute('aria-hidden', 'true');
+                label.textContent =
+                    `${type} ${caloriesByType[type].toLocaleString()} kcal`;
+                item.append(swatch, label);
+                mealCalorieLegend.append(item);
+            });
+            renderMealHistory();
+
+            if (meals.length === 0) {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.className = 'meal-empty';
+                emptyMessage.textContent = 'No meals logged yet. Add your first meal above.';
+                mealList.append(emptyMessage);
+            }
+
+            meals.forEach(meal => {
+                const item = document.createElement('li');
+                const details = document.createElement('div');
+                const type = document.createElement('span');
+                const name = document.createElement('strong');
+                const calories = document.createElement('span');
+                const removeButton = document.createElement('button');
+                details.className = 'meal-item-details';
+                type.className = 'meal-type';
+                type.textContent = meal.type;
+                name.className = 'meal-name';
+                name.textContent = meal.name;
+                calories.className = 'meal-item-calories';
+                calories.textContent = `${meal.calories.toLocaleString()} kcal`;
+                details.append(type, name, calories);
+                removeButton.type = 'button';
+                removeButton.className = 'meal-remove';
+                removeButton.dataset.mealId = meal.id;
+                removeButton.textContent = 'Remove';
+                removeButton.setAttribute('aria-label', `Remove ${meal.name}`);
+                removeButton.disabled = !mealStorageAvailable;
+                item.append(details, removeButton);
+                mealList.append(item);
+            });
+        }
+
+        function renderMealHistory() {
+            const days = [];
+            const today = new Date(
+                mealTrackerDate.getFullYear(),
+                mealTrackerDate.getMonth(),
+                mealTrackerDate.getDate()
+            );
+            let historyError = null;
+
+            for (let daysAgo = 6; daysAgo >= 0; daysAgo -= 1) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - daysAgo);
+                const dateKey = [
+                    date.getFullYear(),
+                    String(date.getMonth() + 1).padStart(2, '0'),
+                    String(date.getDate()).padStart(2, '0')
+                ].join('-');
+                let total = 0;
+
+                try {
+                    const dailyMeals = JSON.parse(
+                        localStorage.getItem(`health-tracker-meals-${dateKey}`) || '[]'
+                    );
+                    if (!Array.isArray(dailyMeals) || dailyMeals.some(meal =>
+                        !meal ||
+                        typeof meal.name !== 'string' ||
+                        !validMealTypes.includes(meal.type) ||
+                        !Number.isInteger(meal.calories) ||
+                        meal.calories < 1
+                    )) {
+                        throw new Error(`Meal log for ${dateKey} has an invalid format.`);
+                    }
+                    total = dailyMeals.reduce((sum, meal) => sum + meal.calories, 0);
+                } catch (error) {
+                    historyError = error;
+                }
+
+                days.push({
+                    date,
+                    total,
+                    label: date.toLocaleDateString(undefined, { weekday: 'short' }),
+                    dateLabel: date.toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric'
+                    })
+                });
+            }
+
+            mealHistoryChart.replaceChildren();
+            const maxCalories = Math.max(...days.map(day => day.total), 1);
+            days.forEach(day => {
+                const column = document.createElement('div');
+                const value = document.createElement('span');
+                const track = document.createElement('div');
+                const bar = document.createElement('span');
+                const label = document.createElement('span');
+                const dateLabel = document.createElement('span');
+                const percentage = day.total > 0
+                    ? Math.max(day.total / maxCalories * 100, 4)
+                    : 0;
+
+                column.className = 'meal-history-day';
+                value.className = 'meal-history-value';
+                value.textContent = day.total > 0
+                    ? day.total.toLocaleString()
+                    : '—';
+                track.className = 'meal-history-track';
+                bar.className = 'meal-history-bar';
+                bar.style.height = `${percentage}%`;
+                bar.title = `${day.dateLabel}: ${day.total.toLocaleString()} kcal`;
+                track.append(bar);
+                label.className = 'meal-history-label';
+                label.textContent = day.label;
+                dateLabel.className = 'meal-history-date';
+                dateLabel.textContent = day.dateLabel;
+                column.append(value, track, label, dateLabel);
+                mealHistoryChart.append(column);
+            });
+
+            mealHistoryChart.setAttribute(
+                'aria-label',
+                `Daily calorie totals for the last seven days: ${days
+                    .map(day => `${day.dateLabel}, ${day.total} kilocalories`)
+                    .join('; ')}`
+            );
+            mealHistoryStatus.textContent = historyError
+                ? `Could not load all daily meal logs: ${historyError.message}`
+                : '';
+        }
+
+        renderMeals();
+
+        mealForm.addEventListener('submit', event => {
+            event.preventDefault();
+            if (!mealStorageAvailable) {
+                return;
+            }
+
+            const formData = new FormData(mealForm);
+            const name = String(formData.get('name')).trim();
+            const type = String(formData.get('type'));
+            const calories = Number(formData.get('calories'));
+            if (!name || !validMealTypes.includes(type) ||
+                !Number.isInteger(calories) || calories < 1) {
+                mealStatus.textContent = 'Enter a meal name and a valid calorie amount.';
+                return;
+            }
+
+            const meal = {
+                id: `${Date.now()}-${Math.random()}`,
+                name,
+                type,
+                calories
+            };
+            const nextMeals = [...meals, meal];
+            try {
+                localStorage.setItem(mealStorageKey, JSON.stringify(nextMeals));
+            } catch (error) {
+                mealStatus.textContent = `Could not save this meal: ${error.message}`;
+                return;
+            }
+
+            meals = nextMeals;
+            renderMeals();
+            mealForm.reset();
+            mealStatus.textContent = `${name} added to today's meals.`;
+            addToAllTimeStats({ caloriesConsumed: calories }).catch(error => {
+                mealStatus.textContent =
+                    `Meal saved, but all-time calories could not be updated: ${error.message}`;
+            });
+        });
+
+        mealList.addEventListener('click', event => {
+            if (!(event.target instanceof Element)) {
+                return;
+            }
+            const removeButton = event.target.closest('.meal-remove');
+            if (!removeButton || !mealStorageAvailable) {
+                return;
+            }
+
+            const meal = meals.find(item => item.id === removeButton.dataset.mealId);
+            if (!meal) {
+                return;
+            }
+
+            const nextMeals = meals.filter(item => item.id !== meal.id);
+            try {
+                localStorage.setItem(mealStorageKey, JSON.stringify(nextMeals));
+            } catch (error) {
+                mealStatus.textContent = `Could not remove this meal: ${error.message}`;
+                return;
+            }
+
+            meals = nextMeals;
+            renderMeals();
+            mealStatus.textContent = `${meal.name} removed from today's meals.`;
+        });
+    </script>
+</body>
+</html>

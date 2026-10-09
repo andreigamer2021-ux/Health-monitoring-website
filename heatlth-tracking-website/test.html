@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#1565c0">
+    <title>Recipe Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="question-page">
+    <main class="question-form-card">
+        <a class="question-back-link" href="dashboard.html">Back to dashboard</a>
+        <h1>Find a Recipe</h1>
+        <p>Tell us what you have and what you like to help find a recipe.</p>
+
+        <form id="recipe-form" class="question-form">
+            <fieldset class="ingredient-question">
+                <legend>Ingredients you have (choose any)</legend>
+                <div class="ingredient-options">
+                    <label><input type="checkbox" name="ingredients" value="eggs">
+                        <span>Eggs</span><span class="ingredient-doodle" aria-hidden="true">🥚</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="milk">
+                        <span>Milk</span><span class="ingredient-doodle" aria-hidden="true">🥛</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="cheese">
+                        <span>Cheese</span><span class="ingredient-doodle" aria-hidden="true">🧀</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="chicken">
+                        <span>Chicken</span><span class="ingredient-doodle" aria-hidden="true">🍗</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="fish">
+                        <span>Fish</span><span class="ingredient-doodle" aria-hidden="true">🐟</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="rice">
+                        <span>Rice</span><span class="ingredient-doodle" aria-hidden="true">🍚</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="pasta">
+                        <span>Pasta</span><span class="ingredient-doodle" aria-hidden="true">🍝</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="beans">
+                        <span>Beans</span><span class="ingredient-doodle" aria-hidden="true">🫘</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="vegetables">
+                        <span>Vegetables</span><span class="ingredient-doodle" aria-hidden="true">🥕</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="fruit">
+                        <span>Fruit</span><span class="ingredient-doodle" aria-hidden="true">🍎</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="bread">
+                        <span>Bread</span><span class="ingredient-doodle" aria-hidden="true">🍞</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="oats">
+                        <span>Oats</span><span class="ingredient-doodle" aria-hidden="true">🥣</span>
+                    </label>
+                    <label><input type="checkbox" name="ingredients" value="herbs and spices">
+                        <span>Herbs and spices</span><span class="ingredient-doodle" aria-hidden="true">🌿</span>
+                    </label>
+                </div>
+                <label class="question-field" for="other-ingredients">
+                    Other ingredients
+                    <input id="other-ingredients" name="otherIngredients"
+                        placeholder="For example: tomatoes, lentils">
+                </label>
+            </fieldset>
+
+            <fieldset class="ingredient-question">
+                <legend>Dietary preferences (choose any)</legend>
+                <div class="ingredient-options">
+                    <label><input type="checkbox" name="diet" value="vegetarian">
+                        <span>Vegetarian</span><span class="ingredient-doodle" aria-hidden="true">🥬</span>
+                    </label>
+                    <label><input type="checkbox" name="diet" value="vegan">
+                        <span>Vegan</span><span class="ingredient-doodle" aria-hidden="true">🌱</span>
+                    </label>
+                    <label><input type="checkbox" name="diet" value="pescatarian">
+                        <span>Pescatarian</span><span class="ingredient-doodle" aria-hidden="true">🐟</span>
+                    </label>
+                    <label><input type="checkbox" name="diet" value="gluten-free">
+                        <span>Gluten-free</span><span class="ingredient-doodle" aria-hidden="true">🌾</span>
+                    </label>
+                    <label><input type="checkbox" name="diet" value="dairy-free">
+                        <span>Dairy-free</span><span class="ingredient-doodle" aria-hidden="true">🥛</span>
+                    </label>
+                    <label><input type="checkbox" name="diet" value="high-protein">
+                        <span>High-protein</span><span class="ingredient-doodle" aria-hidden="true">💪</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset class="ingredient-question">
+                <legend>Ingredients to avoid (choose any)</legend>
+                <div class="ingredient-options">
+                    <label><input type="checkbox" name="avoid" value="peanuts and tree nuts">
+                        <span>Peanuts and tree nuts</span><span class="ingredient-doodle" aria-hidden="true">🥜</span>
+                    </label>
+                    <label><input type="checkbox" name="avoid" value="dairy">
+                        <span>Dairy</span><span class="ingredient-doodle" aria-hidden="true">🥛</span>
+                    </label>
+                    <label><input type="checkbox" name="avoid" value="eggs">
+                        <span>Eggs</span><span class="ingredient-doodle" aria-hidden="true">🥚</span>
+                    </label>
+                    <label><input type="checkbox" name="avoid" value="fish and shellfish">
+                        <span>Fish and shellfish</span><span class="ingredient-doodle" aria-hidden="true">🐟</span>
+                    </label>
+                    <label><input type="checkbox" name="avoid" value="soy">
+                        <span>Soy</span><span class="ingredient-doodle" aria-hidden="true">🫘</span>
+                    </label>
+                    <label><input type="checkbox" name="avoid" value="wheat and gluten">
+                        <span>Wheat and gluten</span><span class="ingredient-doodle" aria-hidden="true">🌾</span>
+                    </label>
+                    <label><input type="checkbox" name="avoid" value="sesame">
+                        <span>Sesame</span><span class="ingredient-doodle" aria-hidden="true">🌱</span>
+                    </label>
+                </div>
+                <p class="ingredient-note">
+                    For allergies, always check recipe ingredients and packaging carefully.
+                </p>
+            </fieldset>
+
+            <fieldset class="ingredient-question">
+                <legend>Flavors you enjoy (choose any)</legend>
+                <div class="ingredient-options">
+                    <label><input type="checkbox" name="flavors" value="spicy">
+                        <span>Spicy</span><span class="ingredient-doodle" aria-hidden="true">🌶️</span>
+                    </label>
+                    <label><input type="checkbox" name="flavors" value="sweet">
+                        <span>Sweet</span><span class="ingredient-doodle" aria-hidden="true">🍯</span>
+                    </label>
+                    <label><input type="checkbox" name="flavors" value="salty">
+                        <span>Salty</span><span class="ingredient-doodle" aria-hidden="true">🧂</span>
+                    </label>
+                    <label><input type="checkbox" name="flavors" value="savory">
+                        <span>Savory</span><span class="ingredient-doodle" aria-hidden="true">🍲</span>
+                    </label>
+                    <label><input type="checkbox" name="flavors" value="sour">
+                        <span>Sour</span><span class="ingredient-doodle" aria-hidden="true">🍋</span>
+                    </label>
+                    <label><input type="checkbox" name="flavors" value="mild">
+                        <span>Mild</span><span class="ingredient-doodle" aria-hidden="true">🥛</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="recipe-form-grid">
+                <label class="question-field" for="meal-type">
+                    What are you making?
+                    <select id="meal-type" name="mealType">
+                        <option value="">Any meal</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="dinner">Dinner</option>
+                        <option value="snack">Snack</option>
+                        <option value="dessert">Dessert</option>
+                    </select>
+                </label>
+
+                <label class="question-field" for="cuisine">
+                    Cuisine
+                    <select id="cuisine" name="cuisine">
+                        <option value="">Any cuisine</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Mexican">Mexican</option>
+                        <option value="Mediterranean">Mediterranean</option>
+                        <option value="Asian">Asian</option>
+                        <option value="Indian">Indian</option>
+                        <option value="American">American</option>
+                    </select>
+                </label>
+
+                <label class="question-field" for="prep-time">
+                    Maximum cooking time
+                    <select id="prep-time" name="prepTime">
+                        <option value="">Any amount of time</option>
+                        <option value="15 minutes">15 minutes</option>
+                        <option value="30 minutes">30 minutes</option>
+                        <option value="45 minutes">45 minutes</option>
+                        <option value="60 minutes">1 hour</option>
+                    </select>
+                </label>
+
+                <label class="question-field" for="difficulty">
+                    Cooking difficulty
+                    <select id="difficulty" name="difficulty">
+                        <option value="">Any difficulty</option>
+                        <option value="easy">Easy</option>
+                        <option value="moderate">Moderate</option>
+                        <option value="challenging">Challenging</option>
+                    </select>
+                </label>
+
+                <label class="question-field" for="servings">
+                    Number of servings
+                    <input id="servings" name="servings" type="number"
+                        min="1" max="20" placeholder="For example: 2">
+                </label>
+            </div>
+
+            <fieldset class="ingredient-question">
+                <legend>Kitchen equipment you have (choose any)</legend>
+                <div class="ingredient-options">
+                    <label><input type="checkbox" name="equipment" value="stovetop">
+                        <span>Stovetop</span><span class="ingredient-doodle" aria-hidden="true">🍳</span>
+                    </label>
+                    <label><input type="checkbox" name="equipment" value="oven">
+                        <span>Oven</span><span class="ingredient-doodle" aria-hidden="true">♨️</span>
+                    </label>
+                    <label><input type="checkbox" name="equipment" value="microwave">
+                        <span>Microwave</span><span class="ingredient-doodle" aria-hidden="true">📡</span>
+                    </label>
+                    <label><input type="checkbox" name="equipment" value="blender">
+                        <span>Blender</span><span class="ingredient-doodle" aria-hidden="true">🥤</span>
+                    </label>
+                    <label><input type="checkbox" name="equipment" value="air fryer">
+                        <span>Air fryer</span><span class="ingredient-doodle" aria-hidden="true">🍟</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <label class="question-field" for="extra-notes">
+                Anything else to consider? (optional)
+                <textarea id="extra-notes" name="extraNotes"
+                    placeholder="Add ingredients, preferences, or recipe notes"></textarea>
+            </label>
+
+            <button type="submit">Find recipes</button>
+        </form>
+
+        <section id="recipe-results" class="recipe-results" aria-live="polite" hidden>
+            <h2 id="recipe-results-title">Recipe idea</h2>
+            <p id="recipe-results-message"></p>
+            <article id="suggested-recipe" class="suggested-recipe" hidden>
+                <div class="suggested-recipe-heading">
+                    <span id="suggested-recipe-doodle" class="suggested-recipe-doodle"
+                        aria-hidden="true"></span>
+                    <div>
+                        <h3 id="suggested-recipe-name"></h3>
+                        <p id="suggested-recipe-details"></p>
+                    </div>
+                </div>
+                <h4>Ingredients</h4>
+                <ul id="suggested-recipe-ingredients"></ul>
+                <h4>How to make it</h4>
+                <ol id="suggested-recipe-steps"></ol>
+                <p class="ingredient-note">
+                    Suggestions are for inspiration. Check all ingredients carefully,
+                    especially if you have a food allergy.
+                </p>
+                <img id="suggested-recipe-image" class="suggested-recipe-image"
+                    alt="" hidden>
+            </article>
+            <button id="another-recipe-button" type="button" hidden>
+                Show another matching recipe
+            </button>
+        </section>
+    </main>
+
+    <script>
+        const recipeForm = document.getElementById('recipe-form');
+        const recipeResults = document.getElementById('recipe-results');
+        const recipeResultsMessage = document.getElementById('recipe-results-message');
+        const suggestedRecipe = document.getElementById('suggested-recipe');
+        const anotherRecipeButton = document.getElementById('another-recipe-button');
+        const recipeImages = {
+            'Chickpea and Spinach Curry':
+                'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85',
+            'Chicken and Vegetable Rice Bowl':
+                'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=85',
+            'Black Bean and Vegetable Tacos':
+                'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=900&q=85',
+            'Tomato and Vegetable Pasta':
+                'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85',
+            'Fruit and Honey Overnight Oats':
+                'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=85',
+            'Vegetable and Cheese Omelette':
+                'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85',
+            'Salmon and Vegetable Rice':
+                'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=900&q=85',
+            'Avocado and Tomato Toast':
+                'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85'
+        };
+        const recipeCollection = [
+            {
+                name: 'Chickpea and Spinach Curry',
+                doodle: '🍛',
+                meal: 'dinner',
+                cuisine: 'Indian',
+                minutes: 30,
+                difficulty: 'easy',
+                servings: 2,
+                ingredients: ['beans', 'vegetables', 'rice', 'herbs and spices'],
+                diet: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free'],
+                flavors: ['spicy', 'savory'],
+                allergens: [],
+                equipment: ['stovetop'],
+                ingredientList: [
+                    '1 can chickpeas, drained',
+                    '2 cups spinach or chopped vegetables',
+                    '1 cup cooked rice',
+                    '1 cup crushed tomatoes',
+                    '1 teaspoon curry powder',
+                    '1 tablespoon cooking oil'
+                ],
+                steps: [
+                    'Warm the oil in a pan over medium heat.',
+                    'Stir in the curry powder and tomatoes; simmer for 5 minutes.',
+                    'Add chickpeas and vegetables. Cook until hot and tender.',
+                    'Serve over cooked rice.'
+                ]
+            },
+            {
+                name: 'Chicken and Vegetable Rice Bowl',
+                doodle: '🍚',
+                meal: 'dinner',
+                cuisine: 'Asian',
+                minutes: 30,
+                difficulty: 'easy',
+                servings: 2,
+                ingredients: ['chicken', 'rice', 'vegetables', 'herbs and spices'],
+                diet: ['gluten-free', 'dairy-free', 'high-protein'],
+                flavors: ['savory', 'mild'],
+                allergens: [],
+                equipment: ['stovetop'],
+                ingredientList: [
+                    '1 chicken breast, cut into small pieces',
+                    '1 cup rice',
+                    '2 cups chopped vegetables',
+                    '1 tablespoon cooking oil',
+                    'Garlic, lemon, salt, and pepper to taste'
+                ],
+                steps: [
+                    'Cook the rice according to its package directions.',
+                    'Heat oil in a pan and cook the chicken until fully cooked.',
+                    'Add vegetables and cook until tender-crisp.',
+                    'Season with garlic, lemon, salt, and pepper, then serve over rice.'
+                ]
+            },
+            {
+                name: 'Black Bean and Vegetable Tacos',
+                doodle: '🌮',
+                meal: 'dinner',
+                cuisine: 'Mexican',
+                minutes: 25,
+                difficulty: 'easy',
+                servings: 2,
+                ingredients: ['beans', 'vegetables', 'herbs and spices'],
+                diet: ['vegetarian', 'vegan', 'dairy-free'],
+                flavors: ['spicy', 'savory'],
+                allergens: ['wheat and gluten'],
+                equipment: ['stovetop'],
+                ingredientList: [
+                    '1 can black beans, drained',
+                    '4 small tortillas',
+                    '1 cup chopped tomato or other vegetables',
+                    '1 teaspoon cumin',
+                    'Lime juice and salsa to taste'
+                ],
+                steps: [
+                    'Warm the beans in a pan with cumin and a splash of water.',
+                    'Warm the tortillas in a dry pan.',
+                    'Fill each tortilla with beans and chopped vegetables.',
+                    'Finish with lime juice and salsa.'
+                ]
+            },
+            {
+                name: 'Tomato and Vegetable Pasta',
+                doodle: '🍝',
+                meal: 'dinner',
+                cuisine: 'Italian',
+                minutes: 30,
+                difficulty: 'easy',
+                servings: 2,
+                ingredients: ['pasta', 'vegetables', 'cheese', 'herbs and spices'],
+                diet: ['vegetarian'],
+                flavors: ['savory', 'mild'],
+                allergens: ['wheat and gluten', 'dairy'],
+                equipment: ['stovetop'],
+                ingredientList: [
+                    '160 g pasta',
+                    '2 cups chopped vegetables',
+                    '1 cup crushed tomatoes',
+                    '1 tablespoon olive oil',
+                    'Dried herbs and grated cheese (optional)'
+                ],
+                steps: [
+                    'Cook the pasta according to its package directions.',
+                    'Warm olive oil in a pan and cook the vegetables until tender.',
+                    'Add crushed tomatoes and herbs; simmer for 10 minutes.',
+                    'Toss the sauce with drained pasta and add cheese if desired.'
+                ]
+            },
+            {
+                name: 'Fruit and Honey Overnight Oats',
+                doodle: '🥣',
+                meal: 'breakfast',
+                cuisine: 'American',
+                minutes: 10,
+                difficulty: 'easy',
+                servings: 1,
+                ingredients: ['oats', 'milk', 'fruit'],
+                diet: ['vegetarian'],
+                flavors: ['sweet', 'mild'],
+                allergens: ['dairy', 'wheat and gluten'],
+                equipment: [],
+                ingredientList: [
+                    '1/2 cup rolled oats',
+                    '1/2 cup milk',
+                    '1/2 cup chopped fruit',
+                    '1 teaspoon honey (optional)'
+                ],
+                steps: [
+                    'Stir the oats and milk together in a covered container.',
+                    'Refrigerate for at least 4 hours or overnight.',
+                    'Top with chopped fruit and honey before eating.'
+                ]
+            },
+            {
+                name: 'Vegetable and Cheese Omelette',
+                doodle: '🍳',
+                meal: 'breakfast',
+                cuisine: 'American',
+                minutes: 15,
+                difficulty: 'easy',
+                servings: 1,
+                ingredients: ['eggs', 'cheese', 'vegetables'],
+                diet: ['vegetarian', 'gluten-free', 'high-protein'],
+                flavors: ['savory', 'salty'],
+                allergens: ['eggs', 'dairy'],
+                equipment: ['stovetop'],
+                ingredientList: [
+                    '2 eggs',
+                    '1/4 cup chopped vegetables',
+                    '2 tablespoons grated cheese',
+                    '1 teaspoon cooking oil'
+                ],
+                steps: [
+                    'Beat the eggs in a bowl.',
+                    'Warm oil in a small pan and cook the vegetables until softened.',
+                    'Pour in the eggs and cook gently until nearly set.',
+                    'Add cheese, fold the omelette, and cook until the eggs are firm.'
+                ]
+            },
+            {
+                name: 'Salmon and Vegetable Rice',
+                doodle: '🐟',
+                meal: 'dinner',
+                cuisine: 'Asian',
+                minutes: 30,
+                difficulty: 'moderate',
+                servings: 2,
+                ingredients: ['fish', 'rice', 'vegetables', 'herbs and spices'],
+                diet: ['pescatarian', 'gluten-free', 'dairy-free', 'high-protein'],
+                flavors: ['savory', 'mild'],
+                allergens: ['fish and shellfish'],
+                equipment: ['stovetop', 'oven'],
+                ingredientList: [
+                    '2 salmon fillets',
+                    '1 cup rice',
+                    '2 cups vegetables',
+                    '1 tablespoon oil',
+                    'Lemon, salt, and pepper to taste'
+                ],
+                steps: [
+                    'Cook the rice according to its package directions.',
+                    'Bake salmon at 200 C (400 F) until it flakes easily, about 12-15 minutes.',
+                    'Steam or saute the vegetables until tender.',
+                    'Serve the salmon and vegetables with rice and lemon.'
+                ]
+            },
+            {
+                name: 'Avocado and Tomato Toast',
+                doodle: '🥑',
+                meal: 'lunch',
+                cuisine: 'American',
+                minutes: 10,
+                difficulty: 'easy',
+                servings: 1,
+                ingredients: ['bread', 'vegetables', 'herbs and spices'],
+                diet: ['vegetarian', 'vegan', 'dairy-free'],
+                flavors: ['savory', 'sour'],
+                allergens: ['wheat and gluten'],
+                equipment: [],
+                ingredientList: [
+                    '2 slices bread',
+                    '1 ripe avocado',
+                    '1 small tomato, sliced',
+                    'Lemon juice, salt, and pepper to taste'
+                ],
+                steps: [
+                    'Toast the bread.',
+                    'Mash avocado with a squeeze of lemon juice, salt, and pepper.',
+                    'Spread avocado on the toast and top with sliced tomato.'
+                ]
+            }
+        ];
+        let matchingRecipes = [];
+        let nextRecipeIndex = 0;
+
+        const selectedValues = (formData, name) =>
+            formData.getAll(name).map(String);
+
+        function recipeMatches(recipe, preferences) {
+            if (preferences.diet.some(item => !recipe.diet.includes(item))) {
+                return false;
+            }
+            if (preferences.avoid.some(item => recipe.allergens.includes(item))) {
+                return false;
+            }
+            if (preferences.meal && recipe.meal !== preferences.meal) {
+                return false;
+            }
+            if (preferences.cuisine && recipe.cuisine !== preferences.cuisine) {
+                return false;
+            }
+            if (preferences.prepTime &&
+                recipe.minutes > Number.parseInt(preferences.prepTime, 10)) {
+                return false;
+            }
+            if (preferences.difficulty &&
+                recipe.difficulty !== preferences.difficulty) {
+                return false;
+            }
+            if (preferences.equipment.length > 0 &&
+                recipe.equipment.some(item => !preferences.equipment.includes(item))) {
+                return false;
+            }
+            if (preferences.ingredients.length > 0 &&
+                !preferences.ingredients.some(item => recipe.ingredients.includes(item))) {
+                return false;
+            }
+            if (preferences.otherIngredients.length > 0 &&
+                !preferences.otherIngredients.some(item =>
+                    recipe.ingredients.includes(item) ||
+                    Object.entries({
+                        avocado: 'vegetables',
+                        carrot: 'vegetables',
+                        chickpea: 'beans',
+                        chickpeas: 'beans',
+                        onion: 'vegetables',
+                        pepper: 'vegetables',
+                        spinach: 'vegetables',
+                        tomato: 'vegetables',
+                        tomatoes: 'vegetables'
+                    }).some(([alias, category]) =>
+                        item.includes(alias) && recipe.ingredients.includes(category)
+                    ) ||
+                    recipe.ingredientList.some(recipeIngredient =>
+                        recipeIngredient.toLowerCase().includes(item)
+                    )
+                )) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function recipeScore(recipe, preferences) {
+            return preferences.flavors.filter(item => recipe.flavors.includes(item)).length;
+        }
+
+        function scaleIngredient(item, servings, originalServings) {
+            const amountMatch = item.match(/^(\d+(?:\.\d+)?|\d+\/\d+)(?=\s)/);
+            if (!amountMatch) {
+                return item;
+            }
+
+            const amount = amountMatch[1].includes('/')
+                ? amountMatch[1].split('/').reduce(
+                    (numerator, denominator) => Number(numerator) / Number(denominator)
+                )
+                : Number(amountMatch[1]);
+            const scaledAmount = Math.round(
+                amount * servings / originalServings * 100
+            ) / 100;
+            const remainingText = item.slice(amountMatch[0].length).trimStart();
+            const unitMatch = remainingText.match(/^([a-z]+)(.*)$/i);
+            if (scaledAmount !== 1 && unitMatch) {
+                const pluralUnits = {
+                    breast: 'breasts',
+                    can: 'cans',
+                    cup: 'cups',
+                    egg: 'eggs',
+                    fillet: 'fillets',
+                    slice: 'slices',
+                    tablespoon: 'tablespoons',
+                    teaspoon: 'teaspoons'
+                };
+                const unit = unitMatch[1].toLowerCase();
+                return `${scaledAmount} ${pluralUnits[unit] ?? unitMatch[1]}${unitMatch[2]}`;
+            }
+            return `${scaledAmount} ${remainingText}`;
+        }
+
+        function renderRecipe(recipe, servings) {
+            const doodle = document.getElementById('suggested-recipe-doodle');
+            const name = document.getElementById('suggested-recipe-name');
+            const details = document.getElementById('suggested-recipe-details');
+            const ingredientsList = document.getElementById('suggested-recipe-ingredients');
+            const stepsList = document.getElementById('suggested-recipe-steps');
+            const image = document.getElementById('suggested-recipe-image');
+            const targetServings = Number(servings) || recipe.servings;
+            const ingredientItems = recipe.ingredientList.map(item => {
+                const element = document.createElement('li');
+                element.textContent = scaleIngredient(
+                    item,
+                    targetServings,
+                    recipe.servings
+                );
+                return element;
+            });
+            const stepItems = recipe.steps.map(item => {
+                const element = document.createElement('li');
+                element.textContent = item;
+                return element;
+            });
+
+            doodle.textContent = recipe.doodle;
+            name.textContent = recipe.name;
+            details.textContent =
+                `${recipe.cuisine} | ${recipe.minutes} min | ${recipe.difficulty} | Serves ${targetServings}`;
+            image.hidden = false;
+            image.alt = `${recipe.name}, prepared and ready to serve`;
+            image.src = recipeImages[recipe.name];
+            image.onerror = () => {
+                image.hidden = true;
+                recipeResultsMessage.textContent =
+                    'The recipe is shown above, but its photo could not be loaded.';
+            };
+            ingredientsList.replaceChildren(...ingredientItems);
+            stepsList.replaceChildren(...stepItems);
+            suggestedRecipe.hidden = false;
+            recipeResultsMessage.textContent = '';
+            anotherRecipeButton.hidden = matchingRecipes.length < 2;
+        }
+
+        function showNextRecipe() {
+            if (matchingRecipes.length === 0) {
+                return;
+            }
+
+            const recipe = matchingRecipes[nextRecipeIndex];
+            nextRecipeIndex = (nextRecipeIndex + 1) % matchingRecipes.length;
+            const servings = new FormData(recipeForm).get('servings')?.toString();
+            renderRecipe(recipe, servings);
+        }
+
+        recipeForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const formData = new FormData(recipeForm);
+            const otherIngredients = formData.get('otherIngredients')
+                ?.toString()
+                .toLowerCase()
+                .split(',')
+                .map(item => item.trim())
+                .filter(Boolean) ?? [];
+            const preferences = {
+                ingredients: selectedValues(formData, 'ingredients'),
+                otherIngredients,
+                diet: selectedValues(formData, 'diet'),
+                avoid: selectedValues(formData, 'avoid'),
+                flavors: selectedValues(formData, 'flavors'),
+                equipment: selectedValues(formData, 'equipment'),
+                meal: formData.get('mealType')?.toString() ?? '',
+                cuisine: formData.get('cuisine')?.toString() ?? '',
+                prepTime: formData.get('prepTime')?.toString() ?? '',
+                difficulty: formData.get('difficulty')?.toString() ?? ''
+            };
+            const matched = recipeCollection.filter(recipe =>
+                recipeMatches(recipe, preferences)
+            );
+            matchingRecipes = matched.sort((first, second) =>
+                recipeScore(second, preferences) - recipeScore(first, preferences)
+            );
+            nextRecipeIndex = 0;
+            recipeResults.hidden = false;
+            if (matchingRecipes.length === 0) {
+                suggestedRecipe.hidden = true;
+                anotherRecipeButton.hidden = true;
+                recipeResultsMessage.textContent =
+                    'No recipe in our current collection matches all those choices. Try removing a filter or selecting different ingredients.';
+            } else {
+                showNextRecipe();
+            }
+            recipeResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        anotherRecipeButton.addEventListener('click', showNextRecipe);
+    </script>
+</body>
+</html>

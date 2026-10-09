@@ -1,0 +1,34 @@
+{
+  "id": "./",
+  "name": "HealthTracker67",
+  "short_name": "Health67",
+  "description": "Track daily health goals, meals, water, and activity.",
+  "start_url": "./dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#1565c0",
+  "categories": ["health", "fitness", "lifestyle"],
+  "icons": [
+    {
+      "src": "./carnivours-plant.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Meals",
+      "short_name": "Meals",
+      "url": "./daily-meal.html",
+      "icons": [
+        {
+          "src": "./carnivours-plant.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
