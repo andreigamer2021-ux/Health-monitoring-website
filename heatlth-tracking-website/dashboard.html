@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track your health here!!</title>
+    <!-- Conectare la fișierul CSS extern -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body hidden>
+    <div class="account-bar">
+        <div class="account-menu-container">
+            <button id="profile-menu-toggle" class="photo-button" type="button"
+                aria-label="Open account options" aria-controls="account-menu" aria-expanded="false">
+                <img src="profile-placeholder.svg" alt="">
+            </button>
+            <div id="account-menu" class="account-menu" hidden>
+                <span id="user-email"></span>
+                <span id="account-status" role="status" aria-live="polite"></span>
+                <button id="open-stats" type="button">Stats</button>
+                <button id="open-settings" type="button">
+                    Settings <span class="settings-gear" aria-hidden="true">&#9881;</span>
+                </button>
+                <button id="open-profile-pictures" type="button">Profile pictures</button>
+                <button id="sign-out" type="button">Sign out</button>
+            </div>
+        </div>
+    </div>
+    <dialog id="profile-pictures-dialog" class="profile-dialog" aria-labelledby="profile-dialog-title">
+        <div class="profile-dialog-header">
+            <h2 id="profile-dialog-title">Profile pictures</h2>
+            <button id="close-profile-dialog" class="profile-dialog-close" type="button"
+                aria-label="Close profile pictures">&times;</button>
+        </div>
+        <div id="profile-picture-options" class="profile-picture-grid"
+            role="group" aria-label="Choose a profile picture"></div>
+    </dialog>
+
+    <h1>Health Dashboard</h1>
+
+    <div class="summary-container">
+        <div class="card">
+            <h3>Steps</h3>
+            <div class="value" id="steps-value"></div>
+            <div class="unit">Steps per day</div>
+            <div class="steps-done" id="steps-done">Steps Done: 0</div>
+            <button id="steps" type="button">+1000 steps</button>
+        </div>
+        <div class="card calories">
+            <h3>Calories</h3>
+            <div class="value" id="calories-value"></div>
+            <div class="unit">Calories</div>
+            <button id="calories-intake" type="button">+100 calories</button>
+            <button id="calories-burned" type="button">Log +100 calories burned</button>
+        </div>
+    </div>
+
+    <!-- Tabelul 1: Activități -->
+    <div class="table-container">
+        <h2>Activities Log</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Activity Name</th>
+                    <th>Duration</th>
+                    <th>Calories</th>
+                </tr>
+            </thead>
+            <tbody id="activities-table"></tbody>
+        </table>
+    </div>
+
+    <!-- Tabelul 2: Apă și Calorii ale zilei -->
+    <div class="table-container">
+        <h2>Daily Overview (Water & Intake)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Recorded</th>
+                    <th>Daily Goal</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody id="daily-stats-table"></tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import { addToAllTimeStats, loadDailyGoals } from './account-goals.js';
+
+        let savedGoalDetails = null;
+        try {
+            savedGoalDetails = await loadDailyGoals();
+        } catch (error) {
+            document.getElementById('account-status').textContent =
+                `Could not load your saved goals: ${error.message}`;
+        }
+
+        const savedGoals = savedGoalDetails?.goals ?? {};
+        const savedGoalNumber = name => {
+            const value = Number(savedGoals[name]);
+            return Number.isFinite(value) && value >= 0 ? value : 0;
+        };
+        const formValues = new URLSearchParams(window.location.search);
+        const formNumber = (name, fallback) => {
+            const value = formValues.get(name);
+            if (value === null || value.trim() === '') {
+                return fallback;
+            }
+
+            const number = Number(value);
+            return Number.isFinite(number) && number >= 0 ? number : fallback;
+        };
+
+        const healthData = {
+            steps: formNumber('steps', savedGoalNumber('steps')),
+            stepsDone: 0,
+            waterIntakeLiters: formNumber('waterIntakeLiters', 0),
+            waterGoalLiters: formNumber(
+                'waterGoalLiters',
+                savedGoalNumber('waterGoalLiters')
+            ),
+            caloriesConsumed: formNumber('caloriesConsumed', 0),
+            caloriesBurned: 0,
+            caloriesGoal: formNumber(
+                'caloriesGoal',
+                savedGoalNumber('caloriesGoal')
+            ),
+            caloriesBurnedGoal: formNumber(
+                'caloriesBurnedGoal',
+                savedGoalNumber('caloriesBurnedGoal')
+            ),
+            activities: [
+                { name: 'running', durationMinutes: 0, calories: 0 },
+                { name: 'walking', durationMinutes: 0, calories: 0 }
+            ]
+        };
+
+        // Populare carduri
+        document.getElementById('steps-value').textContent = healthData.steps.toLocaleString();
+        document.getElementById('calories-value').textContent = healthData.caloriesConsumed.toLocaleString();
+
+        // Populare Tabel 1 (Activități)
+        document.getElementById('activities-table').innerHTML = healthData.activities
+            .map(activity => `
+                <tr>
+                    <td>${activity.name}</td>
+                    <td>${activity.durationMinutes} min</td>
+                    <td>${activity.calories} kcal</td>
+                </tr>
+            `)
+            .join('');
+
+        // Populare Tabel 2 (Apa băut și Calorii zi)
+        function renderDailyStats() {
+            const dailyOverview = [
+                {
+                    metric: 'Steps',
+                    current: healthData.stepsDone,
+                    goalValue: healthData.steps,
+                    unit: 'steps'
+                },
+                {
+                    metric: 'Water Intake',
+                    current: healthData.waterIntakeLiters,
+                    goalValue: healthData.waterGoalLiters,
+                    unit: 'L'
+                },
+                {
+                    metric: 'Calories Consumed',
+                    current: healthData.caloriesConsumed,
+                    goalValue: healthData.caloriesGoal,
+                    unit: 'kcal'
+                },
+                {
+                    metric: 'Calories Burned',
+                    current: healthData.caloriesBurned,
+                    goalValue: healthData.caloriesBurnedGoal,
+                    unit: 'kcal'
+                }
+            ];
+
+            document.getElementById('daily-stats-table').innerHTML = dailyOverview
+                .map(item => {
+                    const hasGoal = item.goalValue > 0;
+                    const progressPercent = hasGoal
+                        ? Math.round(item.current / item.goalValue * 100)
+                        : 0;
+                    const progressValue = Math.min(progressPercent, 100);
+                    const formatValue = value => item.unit === 'L'
+                        ? value.toFixed(2)
+                        : value.toLocaleString();
+                    const goalText = hasGoal
+                        ? `${formatValue(item.goalValue)} ${item.unit}`
+                        : 'No goal set';
+                    const progressText = hasGoal
+                        ? `${progressPercent}%`
+                        : 'Set a goal to track progress';
+                    const intakeButton = item.metric === 'Water Intake'
+                        ? '<button id="water-intake" type="button">+250ml water</button>'
+                        : '';
+
+                    return `
+                        <tr>
+                            <td>${item.metric}</td>
+                            <td>${formatValue(item.current)} ${item.unit} ${intakeButton}</td>
+                            <td>${goalText}</td>
+                            <td>
+                                ${hasGoal
+                                    ? `<progress max="100" value="${progressValue}"
+                                        aria-label="${item.metric}: ${progressPercent}% of goal"></progress>`
+                                    : ''}
+                                <span>${progressText}</span>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join('');
+        }
+
+        renderDailyStats();
+
+        function recordAllTimeStats(increments) {
+            addToAllTimeStats(increments).catch(error => {
+                document.getElementById('account-status').textContent =
+                    `Could not save all-time stats: ${error.message}`;
+            });
+        }
+
+        // Event Listener pentru butonul de apă
+        document.getElementById('daily-stats-table').addEventListener('click', event => {
+            if (event.target.id === 'water-intake') {
+                healthData.waterIntakeLiters += 0.25;
+                renderDailyStats();
+                recordAllTimeStats({ waterIntakeLiters: 0.25 });
+            }
+        });
+        document.getElementById('calories-intake').addEventListener('click', () => {
+            healthData.caloriesConsumed += 100;
+            document.getElementById('calories-value').textContent =
+                healthData.caloriesConsumed.toLocaleString();
+            renderDailyStats();
+            recordAllTimeStats({ caloriesConsumed: 100 });
+        });
+        document.getElementById('calories-burned').addEventListener('click', () => {
+            healthData.caloriesBurned += 100;
+            renderDailyStats();
+            recordAllTimeStats({ caloriesBurned: 100 });
+        });
+        document.getElementById('steps').addEventListener('click', () => {
+            healthData.stepsDone += 1000;
+            document.getElementById('steps-done').textContent =
+                `Steps Done: ${healthData.stepsDone.toLocaleString()}`;
+            renderDailyStats();
+            recordAllTimeStats({ steps: 1000 });
+        });
+    </script>
+    <script type="module" src="auth-guard.js"></script>
+    <script type="module" src="water-reminder.js"></script>
+    <script type="module" src="settings.js"></script>
+    <script type="module" src="plant-pet.js"></script>
+</body>
+</html>

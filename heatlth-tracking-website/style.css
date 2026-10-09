@@ -1,0 +1,1012 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    margin: 20px;
+    color: #2c3e50;
+}
+
+body[hidden] {
+    display: none;
+}
+
+.plant-pet {
+    position: fixed;
+    z-index: 5;
+    top: -100px;
+    left: 12px;
+    width: 78px;
+    height: 85px;
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.plant-water-bottle {
+    position: fixed;
+    z-index: 6;
+    width: 28px;
+    height: 42px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.plant-water-bottle img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform: rotate(var(--bottle-tilt, 0deg));
+    transform-origin: center bottom;
+    transition: transform 140ms ease-out;
+}
+
+.plant-water-bottle-held img {
+    animation: plant-water-bottle-wiggle 180ms ease-in-out infinite alternate;
+}
+
+@keyframes plant-water-bottle-wiggle {
+    from {
+        transform: rotate(calc(var(--bottle-tilt, 0deg) - 7deg));
+    }
+    to {
+        transform: rotate(calc(var(--bottle-tilt, 0deg) + 7deg));
+    }
+}
+
+.plant-water-bottle-held {
+    z-index: 30;
+    cursor: grabbing;
+    filter: drop-shadow(0 3px 5px rgb(36 123 155 / 45%));
+}
+
+.plant-pet-water-target img {
+    filter: drop-shadow(0 0 8px #6bdcff);
+}
+
+.plant-pet-golden img {
+    filter: sepia(1) saturate(4) hue-rotate(2deg) brightness(1.15);
+}
+
+.plant-pet img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: center bottom;
+    pointer-events: none;
+}
+
+.plant-pet-drink-progress {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    width: 42px;
+    height: 6px;
+    overflow: hidden;
+    border: 1px solid #247b9b;
+    border-radius: 999px;
+    background: #e8f7fc;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+    transform: translateX(-50%);
+}
+
+.plant-pet-drink-progress-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #45bde0, #8ce5f7);
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+
+.plant-pet-hearts {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    display: flex;
+    gap: 3px;
+    transform: translateX(-50%);
+}
+
+.plant-pet-hearts:empty {
+    display: none;
+}
+
+.plant-pet-hearts span {
+    color: #e74c65;
+    font-size: 13px;
+    line-height: 1;
+    animation: pet-heart-float 900ms ease-out both;
+    animation-delay: calc(var(--heart-index) * 90ms);
+}
+
+.plant-pet-hearts span:nth-child(2) {
+    margin-top: -7px;
+}
+
+.plant-pet-loved img {
+    animation: plant-pet-loved 220ms ease-in-out 2 alternate;
+}
+
+@keyframes pet-heart-float {
+    from {
+        opacity: 0;
+        translate: 0 8px;
+        scale: .7;
+    }
+    20% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        translate: 0 -18px;
+        scale: 1;
+    }
+}
+
+@keyframes plant-pet-loved {
+    to {
+        scale: 1.08;
+    }
+}
+
+.plant-pet-facing-left img {
+    transform: scaleX(var(--pet-facing, 1));
+}
+
+.plant-pet-wall-left img {
+    transform: rotate(90deg);
+    transform-origin: center center;
+}
+
+.plant-pet-wall-right img {
+    transform: rotate(-90deg);
+    transform-origin: center center;
+}
+
+.plant-pet-airborne img {
+    animation: plant-pet-airborne 360ms ease-in-out infinite alternate;
+}
+
+.plant-pet-dragging {
+    cursor: grabbing;
+}
+
+.plant-pet-dragging img {
+    animation: plant-pet-airborne 360ms ease-in-out infinite alternate;
+}
+
+@keyframes plant-pet-airborne {
+    from {
+        transform: scaleX(var(--pet-facing, 1)) rotate(-7deg) translateY(-2px);
+    }
+    to {
+        transform: scaleX(var(--pet-facing, 1)) rotate(7deg) translateY(1px);
+    }
+}
+
+.plant-pet-walking {
+    animation: plant-pet-forward-hop 300ms ease-in-out infinite alternate;
+}
+
+.plant-pet-walking img {
+    animation: plant-pet-walk-bob 420ms ease-in-out infinite alternate;
+}
+
+@keyframes plant-pet-forward-hop {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    35% {
+        transform: translate3d(var(--pet-walk-drift, 5px), -8px, 0);
+    }
+    100% {
+        transform: translate3d(var(--pet-walk-drift, 5px), 0, 0);
+    }
+}
+
+@keyframes plant-pet-walk-bob {
+    from {
+        translate: 0 0;
+    }
+    to {
+        translate: 0 -4px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .plant-pet-walking img,
+    .plant-pet-airborne img,
+    .plant-pet-dragging img,
+    .plant-pet-loved img,
+    .plant-pet-hearts span {
+        animation: none;
+    }
+
+    .plant-water-bottle img,
+    .plant-water-bottle-held img {
+        transition: none;
+        animation: none;
+    }
+}
+
+.account-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.account-menu-container {
+    position: relative;
+}
+
+.account-menu-container::after {
+    position: absolute;
+    left: 50%;
+    bottom: -32px;
+    width: 26px;
+    height: 30px;
+    margin-left: -13px;
+    background: url("profile-heart.svg") center / contain no-repeat;
+    content: "";
+    pointer-events: none;
+    transform-origin: center bottom;
+    animation: profile-heartbeat 2.6s ease-in-out infinite;
+}
+
+.account-menu-container::before {
+    position: absolute;
+    left: 50%;
+    bottom: -46px;
+    width: 38px;
+    height: 12px;
+    margin-left: -19px;
+    background: url("profile-heartbeat.svg") center / contain no-repeat;
+    content: "";
+    pointer-events: none;
+    transform-origin: center;
+    animation: monitor-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes profile-heartbeat {
+    0%, 70%, 100% {
+        transform: translateY(0);
+    }
+    76% {
+        transform: translateY(-2px) scale(1.04);
+    }
+    82% {
+        transform: translateY(0) scale(1);
+    }
+    88% {
+        transform: translateY(-1px) scale(1.02);
+    }
+    94% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes monitor-pulse {
+    0%, 70%, 100% {
+        transform: scaleY(1);
+    }
+    76% {
+        transform: scaleY(1.35);
+    }
+    82% {
+        transform: scaleY(1);
+    }
+    88% {
+        transform: scaleY(1.2);
+    }
+    94% {
+        transform: scaleY(1);
+    }
+}
+
+.account-bar .photo-button {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+    border: 2px solid #3b6e11;
+    border-radius: 50%;
+    overflow: hidden;
+    flex: 0 0 48px;
+    background-color: #ffffff;
+}
+
+.account-bar .photo-button:hover {
+    transform: scale(1.05);
+}
+
+.photo-button img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.account-menu {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 8px);
+    right: 0;
+    display: grid;
+    gap: 10px;
+    min-width: 190px;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    overflow-wrap: anywhere;
+}
+
+.account-menu[hidden] {
+    display: none;
+}
+
+.account-menu #sign-out {
+    margin-top: 0;
+}
+
+.account-menu #open-stats {
+    margin-top: 4px;
+}
+
+.account-menu button {
+    margin: 0;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #3b6e11;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    justify-self: center;
+    text-align: center;
+    width: 100%;
+}
+
+.settings-gear {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.profile-dialog {
+    width: min(360px, calc(100% - 40px));
+    padding: 20px;
+    border: 0;
+    border-radius: 12px;
+    color: #2c3e50;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.website-settings-dialog {
+    width: min(400px, calc(100% - 40px));
+}
+
+.website-settings-dialog .profile-dialog-header {
+    margin-bottom: 18px;
+}
+
+.website-settings-form {
+    display: grid;
+    gap: 16px;
+}
+
+.website-setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-weight: 600;
+}
+
+.website-setting input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #3b6e11;
+}
+
+.website-setting select {
+    width: auto;
+    min-width: 135px;
+    padding: 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #2c3e50;
+    font: inherit;
+}
+
+.website-settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.website-settings-actions button {
+    padding: 9px 14px;
+    border: 0;
+    border-radius: 5px;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.settings-cancel {
+    background-color: #697675;
+}
+
+.settings-save {
+    background-color: #3b6e11;
+}
+
+.settings-error {
+    color: #a32626;
+}
+
+body.dark-mode {
+    background-color: #17221b;
+    color: #ffffff;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode .profile-dialog-header h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .account-menu,
+body.dark-mode .profile-dialog,
+body.dark-mode .water-reminder-dialog,
+body.dark-mode .card,
+body.dark-mode table {
+    background-color: #243129;
+    color: #ffffff;
+}
+
+body.dark-mode td {
+    color: #ffffff;
+    border-bottom-color: #3b4b40;
+}
+
+body.dark-mode th,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode label,
+body.dark-mode a,
+body.dark-mode .card h3,
+body.dark-mode .card .value,
+body.dark-mode .card .unit,
+body.dark-mode .steps-done,
+body.dark-mode .profile-dialog-close,
+body.dark-mode .website-setting,
+body.dark-mode .settings-error {
+    color: #ffffff;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode option {
+    background-color: #17221b;
+    color: #ffffff;
+    border-color: #647468;
+}
+
+body.dark-mode tr:hover td {
+    background-color: #2e4034;
+}
+
+body.dark-mode .website-setting select {
+    background-color: #17221b;
+    color: #ffffff;
+    border-color: #647468;
+}
+
+body.dark-mode .water-reminder-dialog {
+    color: #ffffff;
+}
+
+.profile-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.profile-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.profile-dialog-header h2 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.profile-dialog-close {
+    padding: 0 6px;
+    border: 0;
+    background: transparent;
+    color: #2c3e50;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.water-reminder-dialog {
+    width: min(340px, calc(100% - 40px));
+    padding: 24px;
+    border: 0;
+    border-radius: 12px;
+    color: #2c3e50;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.water-reminder-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.water-reminder-dialog h2 {
+    margin: 12px 0 8px;
+}
+
+.water-reminder-dialog p {
+    margin: 0 0 20px;
+}
+
+.water-reminder-bottle {
+    display: block;
+    width: 54px;
+    height: 68px;
+    margin: 0 auto;
+}
+
+.water-reminder-dismiss {
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #3b6e11;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.water-reminder-dismiss:hover {
+    background-color: #2e570d;
+}
+
+.profile-picture-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.profile-picture-option {
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 2px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.profile-picture-option[aria-pressed="true"] {
+    border-color: #3b6e11;
+    box-shadow: 0 0 0 2px #d7e8ce;
+}
+
+.profile-picture-option img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: avatar-bob 2.4s ease-in-out infinite;
+}
+
+.profile-picture-option:nth-child(2n) img {
+    animation-delay: -0.8s;
+}
+
+.profile-picture-option:nth-child(3n) img {
+    animation-delay: -1.6s;
+}
+
+.profile-picture-option:hover img {
+    animation-name: avatar-wiggle;
+    animation-duration: 0.45s;
+}
+
+.account-bar .photo-button img {
+    animation: avatar-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes avatar-bob {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes avatar-wiggle {
+    0%, 100% {
+        transform: rotate(0);
+    }
+    30% {
+        transform: rotate(-8deg);
+    }
+    70% {
+        transform: rotate(8deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .profile-picture-option img,
+    .account-bar .photo-button img,
+    .account-menu-container::after,
+    .account-menu-container::before {
+        animation: none;
+    }
+}
+
+.auth-card {
+    max-width: 420px;
+    margin: 8vh auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h1 {
+    margin-top: 0;
+}
+
+.auth-card label {
+    display: block;
+    margin: 16px 0 6px;
+    font-weight: 600;
+}
+
+.auth-card input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font: inherit;
+}
+
+.auth-card button,
+.account-bar button {
+    margin-top: 16px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #3b6e11;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.auth-card .auth-secondary {
+    background: transparent;
+    color: #224605;
+    padding-left: 0;
+}
+
+#auth-status[data-error="true"],
+#account-status {
+    color: #8c2525;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+h2 {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+.summary-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 220px;
+    text-align: center;
+    border-top: 4px solid #224605;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card.calories {
+    border-top-color: #e67e22;
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+}
+
+.card .value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.card .unit {
+    font-size: 14px;
+    color: #459ba1;
+}
+
+.card button {
+    margin-top: 12px;
+}
+
+.table-container td button {
+    margin-left: 8px;
+}
+
+.table-container {
+    width: 80%;
+    margin: 0 auto 30px auto;
+    overflow-x: auto;
+    max-width: 600px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: #3b6e11;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ecf0f1;
+    color: #2c3e50;
+    vertical-align: middle;
+}
+
+td progress {
+    display: block;
+    width: 140px;
+    max-width: 100%;
+    height: 14px;
+    margin-bottom: 4px;
+    accent-color: #3b6e11;
+}
+
+td progress + span {
+    font-size: 13px;
+}
+
+tr:hover td {
+    background-color: #f1f8f9;
+}
+
+/* Centrare container buton */
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.button-container button {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #3b6e11;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#reset-all-stats {
+    padding: 7px 12px;
+    background-color: #b64141;
+    font-size: 14px;
+}
+
+#reset-all-stats:hover {
+    background-color: #963535;
+}
+
+.reset-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.reset-confirm-actions button {
+    padding: 9px 14px;
+    border: 0;
+    border-radius: 5px;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#cancel-reset {
+    background-color: #3b6e11;
+}
+
+#confirm-reset {
+    background-color: #b64141;
+    transform-origin: center;
+    transition: transform 180ms ease;
+}
+
+.button-container a {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 5px;
+    background-color: #3b6e11;
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Stil buton apă */
+#calories-intake,
+#calories-burned {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#calories-intake:hover,
+#calories-burned:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#calories-intake:active,
+#calories-burned:active {
+    transform: scale(0.98);
+}
+#calories-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#water-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#water-intake:active {
+    transform: scale(0.98);
+}
+#water-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#water-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#water-intake:active {
+    transform: scale(0.98);
+}
+#water-intake {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#water-intake:hover {
+    background-color: #45a049;
+    transform: scale(1.03);
+}
+
+#water-intake:active {
+    transform: scale(0.98);
+}
+
+#continue-to-dashboard {
+    padding: 10px 20px;
+    background-color: #b64141;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+#steps {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#sign-out {
+    padding: 10px 20px;
+    background-color: #b64141;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    margin: 0;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
